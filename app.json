@@ -23,10 +23,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "useNextNotificationsApi": true,
+      "permissions": ["RECEIVE_BOOT_COMPLETED"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "sounds": ["./assets/sounds/TF050.wav"]
+        }
+      ]
+    ]
   }
 }

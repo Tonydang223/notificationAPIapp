@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "expo": "~42.0.1",
+    "expo-av": "^9.2.3",
     "expo-constants": "^11.0.1",
     "expo-font": "^9.2.1",
     "expo-notifications": "^0.12.3",

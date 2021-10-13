@@ -1,7 +1,15 @@
-import React,{useState} from 'react'
-import { View,StyleSheet, Button, Text, Image } from 'react-native'
+import React,{useEffect, useRef, useState} from 'react'
+import Constants from 'expo-constants'
+import * as Notifications from 'expo-notifications';
+import { View,StyleSheet, Button, Text, Image, StatusBar } from 'react-native'
 import DialogBox from './DialogBox'
-
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 const Homepage = () => {
     const [show,setShow] = useState(false)
     const openDialog = ()=>{
@@ -10,7 +18,7 @@ const Homepage = () => {
     return (
        <View style={styles.wrapper}>
        <DialogBox show={show} setShow={setShow}/>
-       <Text>notification API</Text>
+       <Text style={styles.headingText}>Notification API</Text>
        <View style={styles.wrapperImg}>
         <Image
            source={require('../assets/image/react-native.jpg')}
@@ -29,10 +37,19 @@ const styles = StyleSheet.create({
     wrapperImg:{
         width:250,
         height:150,
+        shadowColor:'#fff',
+        shadowOffset:{width:10,height:12},
+        shadowOpacity:.4,
+        elevation:16,
+        marginTop:10,
+        marginBottom:10
     },
     img:{
         width:'100%',
         height:'100%'
+    },
+    headingText:{
+        fontSize:28
     }
 })
 export default Homepage

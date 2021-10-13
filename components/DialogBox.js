@@ -1,12 +1,59 @@
-import React from 'react'
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, Modal, StatusBar, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import * as Notifications from 'expo-notifications';
+import {Audio} from 'expo-av'
 const DialogBox = ({show,setShow}) => {
-    const closeDialog = ()=>{
+    const closeDialog =async ()=>{
         setShow(false)
+    }
+    const [sound,setSound] = useState()
+    
+    const handleVibrate =()=>{
+        Vibration.vibrate(100)
+        Alert.alert("Vibration","You clicked vibration button",
+        [
+            {
+                text:'OK',
+                onPress:()=>{
+                    console.log("Cancel Vibrate")
+                    Vibration.cancel()
+                },
+                style:'cancel'
+            }
+        ]
+        )
+    }
+    const handleRingABell =async()=>{
+        console.log("Loading sound")
+       const {sound} = await Audio.Sound.createAsync(
+           require('../assets/sounds/TF050.wav')
+       )
+       setSound(sound)    
+       if(sound){
+          console.log("Playing sound")
+          await sound.playAsync()
+           Alert.alert("Vibration","You clicked ring a bell button",
+           [
+               {
+                   text:'OK',
+                   onPress:()=>{
+                       console.log("Unloading sound")
+                       sound?sound.unloadAsync():null
+                   },
+                   style:'cancel'
+               }
+           ]
+           )
+
+       }
     }
     return (
          <Modal transparent visible={show}>
+             <StatusBar
+                 barStyle={"dark-content"}
+                 backgroundColor="rgba(0,0,0,0.2)"
+             />
              <View style={styles.wrapper}>
              <View style={styles.box}>
              <View style={{justifyContent:'flex-end',width:'100%',flexDirection:'row'}}>
@@ -21,11 +68,13 @@ const DialogBox = ({show,setShow}) => {
                  <View style={styles.containerBtn}>
                  <TouchableOpacity
                  style={styles.btn}
+                 onPress={handleRingABell}
                  >
                      <Text style={{color:'#fff',fontSize:14}}>Ring a bell</Text>
                  </TouchableOpacity>
                  <TouchableOpacity
                  style={styles.btn}
+                 onPress={handleVibrate}
                  >
                      <Text style={{color:'#fff',fontSize:14}}>Vibrate</Text>
                  </TouchableOpacity>
@@ -86,7 +135,7 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     textHeading:{
-        fontSize:23,
+        fontSize:21,
         marginBottom:15
     },
     textContent:{
